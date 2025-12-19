@@ -1,59 +1,322 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PHP_Laravel12_Send_Mail_With_Attachment
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A complete and beginner-friendly Laravel 12 project demonstrating **sending emails with file attachments**. This project includes a web-based email form, support for multiple attachments, inline images, programmatic email sending, queues, validation, and logging.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* Send emails with attachments
+* Web form for sending emails
+* Programmatic email sending
+* Multiple attachments support
+* Inline image embedding
+* Attachment file validation (max 10MB)
+* Clean temporary file handling
+* Bootstrap 5 email form
+* Queue support
+* Error handling and logging
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Project Screenshots
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+<img width="1201" height="886" alt="image" src="https://github.com/user-attachments/assets/d51b657d-8148-4dc4-8840-71faadf229e1" />
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Quick Start
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 1. Clone the Repository
 
-### Premium Partners
+```bash
+git clone https://github.com/yourusername/laravel-email-attachment.git
+cd laravel-email-attachment
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 2. Install Dependencies
 
-## Contributing
+```bash
+composer install
+npm install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Environment Setup
 
-## Code of Conduct
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 4. Configure Mail Settings
 
-## Security Vulnerabilities
+**Mailtrap (Local Development)**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=your-mailtrap-username
+MAIL_PASSWORD=your-mailtrap-password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=hello@example.com
+MAIL_FROM_NAME="${APP_NAME}"
+```
 
-## License
+**Gmail SMTP**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your-email@gmail.com
+MAIL_PASSWORD=your-app-password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=your-email@gmail.com
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+---
+
+## Project Structure
+
+```
+app/
+ ├── Mail/
+ │    └── SendEmailWithAttachment.php
+ ├── Http/
+ │    └── Controllers/
+ │         └── EmailController.php
+resources/
+ ├── views/
+ │    ├── emails/
+ │    │    └── send-attachment.blade.php
+ │    └── email-form.blade.php
+routes/
+ └── web.php
+```
+
+---
+
+## Installation Steps
+
+### Step 1: Create Mailable
+
+```bash
+php artisan make:mail SendEmailWithAttachment
+```
+
+### Step 2: Create Controller
+
+```bash
+php artisan make:controller EmailController
+```
+
+### Step 3: Add Routes (`routes/web.php`)
+
+```php
+use App\Http\Controllers\EmailController;
+
+Route::get('/send-email', [EmailController::class, 'showEmailForm'])->name('email.form');
+Route::post('/send-email', [EmailController::class, 'sendEmailWithAttachment'])->name('send.email');
+Route::get('/send-test-email', [EmailController::class, 'sendEmailProgrammatically'])->name('send.email.programmatically');
+```
+
+---
+
+## Usage Examples
+
+### 1. Send Email via Web Form
+
+Open in browser:
+
+```
+http://your-app.test/send-email
+```
+
+### 2. Programmatic Email Sending
+
+```php
+use App\Mail\SendEmailWithAttachment;
+use Illuminate\Support\Facades\Mail;
+
+$attachmentPath = storage_path('app/public/document.pdf');
+
+Mail::to('recipient@example.com')
+    ->send(new SendEmailWithAttachment(
+        'Your Subject',
+        'Email message body',
+        $attachmentPath,
+        'document.pdf'
+    ));
+```
+
+### 3. Multiple Attachments Example
+
+Inside `SendEmailWithAttachment.php`:
+
+```php
+public function attachments(): array
+{
+    return [
+        Attachment::fromPath($this->attachment1),
+        Attachment::fromPath($this->attachment2),
+        Attachment::fromStorageDisk('s3', 'path/to/file.pdf'),
+    ];
+}
+```
+
+### 4. Inline Images in Blade Email
+
+```html
+<img src="{{ $message->embed(public_path('images/logo.png')) }}" alt="Logo">
+```
+
+---
+
+## Mail Configuration Options
+
+**Mailgun**
+
+```env
+MAIL_MAILER=mailgun
+MAIL_HOST=smtp.mailgun.org
+MAIL_PORT=587
+MAIL_USERNAME=your-mailgun-username
+MAIL_PASSWORD=your-mailgun-password
+MAILGUN_DOMAIN=your-domain.com
+MAILGUN_SECRET=your-mailgun-secret
+```
+
+**SendGrid**
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.sendgrid.net
+MAIL_PORT=587
+MAIL_USERNAME=apikey
+MAIL_PASSWORD=your-sendgrid-api-key
+```
+
+**Amazon SES**
+
+```env
+MAIL_MAILER=ses
+SES_KEY=your-aws-key
+SES_SECRET=your-aws-secret
+SES_REGION=us-east-1
+```
+
+---
+
+## Testing Email Sending
+
+1. **Mailtrap (Recommended)**: Update .env with credentials
+2. **Log Driver (No real emails sent)**
+
+```env
+MAIL_MAILER=log
+```
+
+Emails will appear in:
+
+```
+storage/logs/laravel.log
+```
+
+3. **Test Command**
+
+```bash
+php artisan make:command TestEmailCommand
+```
+
+### Minimal Example
+
+```php
+Route::get('/test-minimal', function() {
+    Mail::raw('Hello World!', function($message) {
+        $message->to('test@example.com')
+                ->subject('Test Email')
+                ->attach(storage_path('app/public/test.txt'), [
+                    'as' => 'document.txt',
+                    'mime' => 'text/plain',
+                ]);
+    });
+
+    return 'Email sent!';
+});
+```
+
+### Queue Email Sending
+
+```bash
+php artisan queue:table
+php artisan migrate
+```
+
+Update `SendEmailWithAttachment` mailable:
+
+```php
+class SendEmailWithAttachment extends Mailable implements ShouldQueue
+{
+    use Queueable, SerializesModels;
+}
+```
+
+---
+
+## Troubleshooting
+
+| Issue                  | Solution                         |
+| ---------------------- | -------------------------------- |
+| Connection refused     | Check SMTP credentials and port  |
+| Attachment not sending | Verify file path and permissions |
+| Email goes to spam     | Configure SPF, DKIM, DMARC       |
+| Slow email sending     | Use queues                       |
+| Max execution time     | Increase upload/timeout limits   |
+
+Debugging Tools:
+
+```bash
+php artisan config:clear
+php artisan cache:clear
+php artisan tinker
+>>> config('mail');
+tail -f storage/logs/laravel.log
+php artisan queue:work
+```
+
+---
+
+## Requirements
+
+* Laravel 12.x
+* PHP 8.2+
+* Extensions: OpenSSL, PDO, Mbstring, Tokenizer, XML, Ctype, JSON
+
+---
+
+## Testing
+
+```bash
+php artisan test
+php artisan make:test EmailTest
+php artisan test --filter testEmailWithAttachment
+```
+
+---
+
+## Security Recommendations
+
+### File Upload Security
+
+* Validate file types and MIME
+* Store uploaded files outside `/public`
+* Virus-scan attachments in production
+
+### Email Security
+
+* Never hardcode SMTP credentials
+* Use environment variables
+* Rate-limit email sending
+* Validate recipient email addresses
