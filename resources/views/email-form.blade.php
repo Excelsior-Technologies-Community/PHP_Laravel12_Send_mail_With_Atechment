@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <!-- Bootstrap CSS for quick styling -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="container mt-5">
         <div class="row justify-content-center">
@@ -33,8 +35,8 @@
 
                             <div class="mb-3">
                                 <label for="email" class="form-label">Recipient Email *</label>
-                                <input type="email" class="form-control" id="email" name="email" 
-                                       value="{{ old('email') }}" required>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    value="{{ old('email') }}" required>
                                 @error('email')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -42,8 +44,8 @@
 
                             <div class="mb-3">
                                 <label for="subject" class="form-label">Subject *</label>
-                                <input type="text" class="form-control" id="subject" name="subject" 
-                                       value="{{ old('subject') }}" required>
+                                <input type="text" class="form-control" id="subject" name="subject"
+                                    value="{{ old('subject') }}" required>
                                 @error('subject')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -51,8 +53,8 @@
 
                             <div class="mb-3">
                                 <label for="message" class="form-label">Message *</label>
-                                <textarea class="form-control" id="message" name="message" 
-                                          rows="5" required>{{ old('message') }}</textarea>
+                                <textarea class="form-control" id="message" name="message" rows="5"
+                                    required>{{ old('message') }}</textarea>
                                 @error('message')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -94,4 +96,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
