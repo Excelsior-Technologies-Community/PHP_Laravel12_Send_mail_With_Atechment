@@ -11,30 +11,61 @@
 
 <body class="bg-light">
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+
         <div class="container">
 
-            <a class="navbar-brand" href="{{ route('dashboard') }}">
-                Email System
+            <a class="navbar-brand fw-bold" href="{{ route('dashboard') }}">
+                📧 Laravel Email System
             </a>
 
-            <div>
+            <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
 
-                <a href="{{ route('dashboard') }}" class="btn btn-outline-light btn-sm">
-                    Dashboard
-                </a>
+                <span class="navbar-toggler-icon"></span>
 
-                <a href="{{ route('email.form') }}" class="btn btn-outline-light btn-sm">
-                    Send Email
-                </a>
+            </button>
 
-                <a href="{{ route('email.history') }}" class="btn btn-outline-light btn-sm">
-                    History
-                </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <ul class="navbar-nav ms-auto align-items-center">
+
+                    <li class="nav-item me-2">
+                        <a href="{{ route('dashboard') }}"
+                            class="btn btn-outline-light btn-sm">
+                            📊 Dashboard
+                        </a>
+                    </li>
+
+                    <li class="nav-item me-2">
+                        <a href="{{ route('email.form') }}"
+                            class="btn btn-outline-light btn-sm">
+                            📨 Send Email
+                        </a>
+                    </li>
+
+                    <li class="nav-item me-2">
+                        <a href="{{ route('email.history') }}"
+                            class="btn btn-outline-light btn-sm">
+                            🕒 Email History
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('templates.index') }}"
+                            class="btn btn-warning btn-sm text-dark fw-semibold">
+                            📄 Email Templates
+                        </a>
+                    </li>
+
+                </ul>
 
             </div>
 
         </div>
+
     </nav>
 
     <div class="container py-4">

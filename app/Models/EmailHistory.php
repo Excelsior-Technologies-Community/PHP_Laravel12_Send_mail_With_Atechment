@@ -12,10 +12,14 @@ class EmailHistory extends Model
         'message',
         'attachment',
         'status',
-        'sent_at'
+        'sent_at',
+        'type',
+        'scheduled_at'
     ];
+
 
     protected $casts = [
         'sent_at' => 'datetime',
+        'scheduled_at' => 'datetime'
     ];
 }

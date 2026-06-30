@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmailController;
-
+use App\Http\Controllers\EmailTemplateController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -43,3 +43,12 @@ Route::delete('/email-history/{id}', [EmailController::class, 'destroy'])
 // ===============================
 Route::delete('/email-history-clear', [EmailController::class, 'clearHistory'])
     ->name('email.clear');
+
+Route::get('/templates', [EmailController::class, 'templates'])
+    ->name('templates.index');
+
+Route::post('/templates',[EmailTemplateController::class, 'store'])
+    ->name('templates.store');
+
+Route::delete('/templates/{id}',[EmailTemplateController::class, 'destroy'])
+    ->name('templates.delete');    

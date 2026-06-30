@@ -19,15 +19,15 @@
                     </div>
                     <div class="card-body">
                         @if(session('success'))
-                            <div class="alert alert-success">
-                                {{ session('success') }}
-                            </div>
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
                         @endif
 
                         @if(session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                            </div>
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
                         @endif
 
                         <form action="{{ route('send.email') }}" method="POST" enctype="multipart/form-data">
@@ -38,7 +38,7 @@
                                 <input type="email" class="form-control" id="email" name="email"
                                     value="{{ old('email') }}" required>
                                 @error('email')
-                                    <div class="text-danger">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
@@ -47,7 +47,7 @@
                                 <input type="text" class="form-control" id="subject" name="subject"
                                     value="{{ old('subject') }}" required>
                                 @error('subject')
-                                    <div class="text-danger">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
@@ -56,7 +56,7 @@
                                 <textarea class="form-control" id="message" name="message" rows="5"
                                     required>{{ old('message') }}</textarea>
                                 @error('message')
-                                    <div class="text-danger">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
@@ -65,8 +65,56 @@
                                 <input type="file" class="form-control" id="attachment" name="attachment">
                                 <div class="form-text">Max file size: 10MB</div>
                                 @error('attachment')
-                                    <div class="text-danger">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                                 @enderror
+                            </div>
+
+                            <div class="mb-3">
+
+                                <label class="form-label">
+                                    Email Template
+                                </label>
+
+
+                                <select
+                                    class="form-control"
+                                    name="template_id"
+                                    id="template">
+
+                                    <option value="">
+                                        Select Template
+                                    </option>
+
+
+                                    @foreach($templates as $template)
+
+                                    <option
+                                        value="{{ $template->id }}"
+                                        data-subject="{{ $template->subject }}"
+                                        data-body="{{ $template->body }}">
+
+                                        {{ $template->name }}
+
+                                    </option>
+
+                                    @endforeach
+
+
+                                </select>
+
+                            </div>
+
+                            <div class="mb-3">
+
+                                <label>
+                                    Schedule Email
+                                </label>
+
+                                <input
+                                    type="datetime-local"
+                                    name="scheduled_at"
+                                    class="form-control">
+
                             </div>
 
                             <button type="submit" class="btn btn-primary">Send Email</button>
@@ -95,6 +143,31 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document
+            .getElementById('template')
+            .addEventListener('change', function() {
+
+
+                let selected =
+                    this.options[this.selectedIndex];
+
+
+                if (selected.value) {
+
+                    document.getElementById('subject').value =
+                        selected.getAttribute('data-subject');
+
+
+                    document.getElementById('message').value =
+                        selected.getAttribute('data-body');
+
+                }
+
+
+            });
+    </script>
 </body>
 
 </html>
