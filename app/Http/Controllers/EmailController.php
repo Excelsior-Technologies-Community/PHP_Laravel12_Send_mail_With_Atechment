@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Mail\SendEmailWithAttachment;
 use App\Models\EmailHistory;
+use App\Models\EmailTemplate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,8 +16,11 @@ class EmailController extends Controller
      */
     public function showEmailForm()
     {
-        return view('email-form');
+        $templates = EmailTemplate::where('status','Active')->get();
+
+        return view('email-form', compact('templates'));
     }
+
 
     /**
      * Send Email
@@ -28,12 +32,34 @@ class EmailController extends Controller
             'subject' => 'required|string|max:255',
             'message' => 'required|string',
             'attachment' => 'nullable|file|max:10240',
+            'template_id' => 'nullable',
+            'scheduled_at' => 'nullable|date'
         ]);
 
         $attachmentPath = null;
         $attachmentName = null;
 
         try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Apply Email Template
+            |--------------------------------------------------------------------------
+            */
+
+            if($request->template_id)
+            {
+
+                $template = EmailTemplate::find( $request->template_id);
+
+                if($template)
+                {
+                    $request->subject = $template->subject;
+                    $request->message =  $template->body;
+
+                }
+
+            }
 
             if ($request->hasFile('attachment')) {
 
@@ -50,6 +76,29 @@ class EmailController extends Controller
                 $attachmentPath = storage_path('app/public/' . $path);
             }
 
+            /*
+            |--------------------------------------------------------------------------
+            | Scheduled Email
+            |--------------------------------------------------------------------------
+            */
+
+            if($request->scheduled_at)
+            {
+                EmailHistory::create([
+                    'email'=>$request->email,
+                    'subject'=>$request->subject,
+                    'message'=>$request->message,
+                    'attachment'=>$attachmentName,
+                    'status'=>'Pending',
+                    'type'=>'scheduled',
+                    'scheduled_at'=>$request->scheduled_at
+
+                ]);
+
+                return back()->with('success','Email scheduled successfully.');
+
+            }
+
             Mail::to($request->email)
                 ->send(new SendEmailWithAttachment(
                     $request->subject,
@@ -64,6 +113,7 @@ class EmailController extends Controller
                 'message' => $request->message,
                 'attachment' => $attachmentName,
                 'status' => 'Sent',
+                'type'=>'instant',
                 'sent_at' => now(),
             ]);
 
@@ -81,6 +131,7 @@ class EmailController extends Controller
                 'message' => $request->message,
                 'attachment' => $attachmentName,
                 'status' => 'Failed',
+                'type'=>'instant',
                 'sent_at' => now(),
             ]);
 
@@ -201,5 +252,17 @@ class EmailController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+        /**
+     * Email Templates Page
+     */
+    public function templates()
+    {
+
+        $templates = EmailTemplate::latest()->get();
+
+        return view('templates.index', compact('templates'));
+
     }
 }
