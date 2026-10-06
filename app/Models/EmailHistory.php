@@ -14,12 +14,22 @@ class EmailHistory extends Model
         'status',
         'sent_at',
         'type',
-        'scheduled_at'
+        'scheduled_at',
+        'tracking_token',
+        'opened_at',
+        'open_count',
+        'last_opened_at',
+        'attachment_downloads',
+        'multiple_attachments',
+        'is_zipped',
     ];
-
 
     protected $casts = [
         'sent_at' => 'datetime',
-        'scheduled_at' => 'datetime'
+        'scheduled_at' => 'datetime',
+        'opened_at' => 'datetime',
+        'last_opened_at' => 'datetime',
+        'multiple_attachments' => 'array',
+        'is_zipped' => 'boolean',
     ];
 }

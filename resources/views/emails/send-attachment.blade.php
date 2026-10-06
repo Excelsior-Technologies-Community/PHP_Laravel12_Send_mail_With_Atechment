@@ -37,5 +37,9 @@
         <p>This email was sent from {{ config('app.name') }}</p>
         <p>Sent at: {{ now()->format('F j, Y, g:i a') }}</p>
     </div>
+
+    @if(!empty($trackingUrl))
+        <img src="{{ $trackingUrl }}" width="1" height="1" style="display:none; width:1px; height:1px;" alt="" />
+    @endif
 </body>
 </html>
