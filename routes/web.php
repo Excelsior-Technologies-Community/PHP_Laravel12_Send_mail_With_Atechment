@@ -51,4 +51,13 @@ Route::post('/templates',[EmailTemplateController::class, 'store'])
     ->name('templates.store');
 
 Route::delete('/templates/{id}',[EmailTemplateController::class, 'destroy'])
-    ->name('templates.delete');    
+    ->name('templates.delete');
+
+// ===============================
+// Live Email Tracking Radar & Attachment Download
+// ===============================
+Route::get('/email-tracker/pixel/{token}', [EmailController::class, 'trackOpen'])
+    ->name('email.track.pixel');
+
+Route::get('/email-tracker/download/{id}', [EmailController::class, 'downloadAttachment'])
+    ->name('email.attachment.download');
